@@ -1,7 +1,7 @@
 import { PageHeader } from '@/layout/components/PageHeader';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { SupplierForm } from './component/supplier-form';
+import { UpdateSupplierForm } from './component/supplier-form/UpdateSupplierForm';
 
 export default function UpdateSupplierPage() {
 
@@ -13,7 +13,7 @@ export default function UpdateSupplierPage() {
             {/* Header */}
             <PageHeader title={t('Update Supplier')}>
             </PageHeader>
-            <SupplierForm id={id} />
+            <UpdateSupplierForm id={id} />
         </div>
     );
 }

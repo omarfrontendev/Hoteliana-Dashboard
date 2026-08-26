@@ -107,8 +107,8 @@ export const FirstLoginScreen = () => {
               className="h-12 w-full"
             >
               {isPending
-                ? 'Changing Password...'
-                : 'Change Password'}
+                ? 'Saving Password...'
+                : 'Save Password'}
             </Button>
           </form>
         </Form>

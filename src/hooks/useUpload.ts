@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { api } from '@/core/api/client';
 import { endpoints } from '@/api/endpoints';
 
@@ -46,4 +46,25 @@ export const useUploadFile = () => {
       return data.data as UploadFileResponse;
     },
   });
+};
+
+export const useGetUploadContent = (
+    uploadId?: number | null,
+) => {
+    return useQuery({
+        queryKey: ['upload-content', uploadId],
+
+        queryFn: async () => {
+            const { data } = await api.get(
+                `/uploads/${uploadId}/content`,
+                {
+                    responseType: 'blob',
+                },
+            );
+
+            return data as Blob;
+        },
+
+        enabled: !!uploadId,
+    });
 };

@@ -22,38 +22,39 @@ export const getApiErrorMessage = (
         ? message.join(', ')
         : message || fallback;
 };
-
 const documentConfig = {
-    commercialRegistration: "commercial_registration",
-    taxCertificate: "tax_certificate",
-    tourismLicense: "tourism_license",
-    supplierContract: "supplier_contract",
-    companyOwnerId: "company_owner_id",
-    bankGuaranteeLetter: "bank_guarantee_letter",
+    commercialRegistrationUploadId: "commercial_registration",
+    taxCertificateUploadId: "tax_certificate",
+    tourismLicenseUploadId: "tourism_license",
+    supplierContractUploadId: "supplier_contract",
+    companyOwnerIdUploadId: "company_owner_id",
+    bankGuaranteeLetterUploadId: "bank_guarantee_letter",
 } as const;
 
-
 export const mapSupplierDocuments = (
-    documents: any[] = []
-) => {
+    documents: any[] = [],
+): any["documents"] => {
     return Object.fromEntries(
         Object.entries(documentConfig).map(
             ([key, documentType]) => {
                 const document = documents.find(
                     (doc) =>
-                        doc.documentType === documentType
+                        doc.documentType === documentType,
                 );
 
                 return [
                     key,
                     {
-                        uploadId: document?.uploadId ?? 0,
-                        originalName:
-                            document?.originalName ?? "",
+                        // uploadId: document?.uploadId ?? null,
+                        // originalName:
+                        //     document?.originalName ?? "",
+                        // mimeType:
+                        //     document?.mimeType ?? "",
                         file: null,
+                        ...document
                     },
                 ];
-            }
-        )
-    );
+            },
+        ),
+    ) as any["documents"];
 };

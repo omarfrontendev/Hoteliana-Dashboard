@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+// const uploadFieldSchema = z.union([
+//     z.number().min(1),
+//     z.instanceof(File),
+// ]);
+
 export const SupplierSchema = z.object({
     legalCompanyNameEn: z.string().min(1, 'English company name is required'),
     legalCompanyNameAr: z.string().min(1, 'Arabic company name is required'),

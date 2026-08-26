@@ -1,16 +1,36 @@
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Controller, get } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import SelectMenu from "./SelectMenu";
 import { MapEditor } from "./MapEditor";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Textarea } from "./textarea";
+import { UploadField } from "./UploadField";
+import { get } from "lodash";
 
 export default function FormField({ form, label, name, placeholder, colSpan, required, type, list, isLoading, selectedCoords, isMulti, ...props }: any) {
 
     const { t } = useTranslation();
+
+    if (type === "uploadId") {
+        const currentValue = form.watch(name);
+
+        const existingUploadId =
+            currentValue?.uploadId ?? null;
+
+        return (
+            <UploadField
+                name={name}
+                label={label}
+                required={required}
+                colSpan={colSpan}
+                form={form}
+                uploadId={existingUploadId}
+            />
+        );
+    }
 
     if (type === "upload") {
         return (
