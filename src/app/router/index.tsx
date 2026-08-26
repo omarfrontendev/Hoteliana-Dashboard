@@ -1,7 +1,8 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import { routes } from "@/config/menu.config";
 
-const router = createBrowserRouter(routes);
+// const router = createBrowserRouter(routes);
+const router = createHashRouter(routes);
 
 export function AppRouter() {
   
