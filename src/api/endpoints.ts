@@ -33,9 +33,9 @@ const agents = {
 }
 
 const uploads = {
-    create: '/hoteliana/uploads',
-    getMetadata: (id: number) => `/hoteliana/uploads/${id}`,
-    getContent: (id: number) => `/hoteliana/uploads/${id}/content`,
+    create: '/uploads',
+    getMetadata: (id: number) => `/uploads/${id}`,
+    getContent: (id: number) => `/uploads/${id}/content`,
 };
 
 const auth = {
