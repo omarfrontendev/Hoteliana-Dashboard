@@ -8,10 +8,25 @@ import ProfilePhotoUpload from "./ProfilePhotoUpload";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Textarea } from "./textarea";
+import { useUploadFile } from "@/hooks/useUpload";
 
 export default function FormField({ form, label, name, placeholder, colSpan, required, type, list, isLoading, selectedCoords, isMulti, ...props }: any) {
 
     const { t } = useTranslation();
+
+    if (type === "upload") {
+        return (
+            <UploadField
+                form={form}
+                name={name}
+                label={label}
+                colSpan={colSpan}
+                required={required}
+                placeholder={placeholder}
+                uploadCategory={props.uploadCategory}
+            />
+        );
+    }
 
     if (type === "spacer") {
         return <div className={colSpan} />;
@@ -167,4 +182,86 @@ export default function FormField({ form, label, name, placeholder, colSpan, req
             </div>
         </div>
     )
+};
+
+function UploadField({
+    form,
+    name,
+    label,
+    colSpan,
+    required,
+    uploadCategory,
+}: any) {
+    const { t } = useTranslation();
+
+    const { mutate: uploadFile, isPending } = useUploadFile();
+
+    const currentUploadId = form.watch(name);
+
+    const handleFileChange = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        const file = event.target.files?.[0];
+
+        if (!file) return;
+
+        uploadFile(
+            {
+                file,
+                category: uploadCategory,
+            },
+            {
+                onSuccess: (data) => {
+                    form.setValue(
+                        name,
+                        data.uploadId,
+                        {
+                            shouldValidate: true,
+                            shouldDirty: true,
+                        }
+                    );
+                },
+            }
+        );
+    };
+
+    return (
+        <div className={`space-y-2 ${colSpan}`}>
+            <Label className="text-slate-700">
+                {t(`fields.${label}`)}
+                {required ? " *" : ""}
+            </Label>
+
+            <Input
+                type="file"
+                accept=".pdf,.png,.jpg,.jpeg"
+                onChange={handleFileChange}
+                disabled={isPending}
+            />
+
+            {isPending && (
+                <p className="text-xs text-slate-500">
+                    Uploading...
+                </p>
+            )}
+
+            {currentUploadId > 0 && !isPending && (
+                <p className="text-xs text-green-600">
+                    File uploaded successfully
+                </p>
+            )}
+
+            {get(form.formState.errors, name) && (
+                <p className="text-xs font-normal text-destructive">
+                    {t(
+                        `validation.${get(
+                            form.formState.errors,
+                            name
+                        )?.message ?? ""
+                        }`
+                    )}
+                </p>
+            )}
+        </div>
+    );
 }

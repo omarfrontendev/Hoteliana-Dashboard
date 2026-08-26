@@ -125,6 +125,55 @@ export const supplierFields = () => {
         },
 
         // Documents
+        {
+            name: 'documents.commercialRegistrationUploadId',
+            label: 'documents.commercialRegistration',
+            colSpan: 'col-span-6',
+            type: 'upload',
+            required: true,
+            uploadCategory: 'commercial_registration',
+        },
+        {
+            name: 'documents.taxCertificateUploadId',
+            label: 'documents.taxCertificate',
+            colSpan: 'col-span-6',
+            type: 'upload',
+            required: true,
+            uploadCategory: 'tax_certificate',
+        },
+        {
+            name: 'documents.tourismLicenseUploadId',
+            label: 'documents.tourismLicense',
+            colSpan: 'col-span-6',
+            type: 'upload',
+            required: true,
+            uploadCategory: 'tourism_license',
+        },
+        {
+            name: 'documents.supplierContractUploadId',
+            label: 'documents.supplierContract',
+            colSpan: 'col-span-6',
+            type: 'upload',
+            required: true,
+            uploadCategory: 'supplier_contract',
+        },
+        {
+            name: 'documents.companyOwnerIdUploadId',
+            label: 'documents.companyOwnerId',
+            colSpan: 'col-span-6',
+            type: 'upload',
+            required: true,
+            uploadCategory: 'company_owner_id',
+        },
+        {
+            name: 'documents.bankGuaranteeLetterUploadId',
+            label: 'documents.bankGuaranteeLetter',
+            colSpan: 'col-span-6',
+            type: 'upload',
+            required: true,
+            uploadCategory: 'bank_guarantee_letter',
+        },
+
         // {
         //   name: 'documents.commercialRegistrationUploadId',
         //   label:
