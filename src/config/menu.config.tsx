@@ -15,7 +15,7 @@ import DashboardUsersView from '@/pages/dashboard/dashboard-users/DashboardUsers
 import ViewPermissions from '@/pages/dashboard/permissions/VeiwPermissions';
 import CreatePermissions from '@/pages/dashboard/permissions/CreatePermissions';
 import UpdatePermissions from '@/pages/dashboard/permissions/UpdatePermissions';
-import { ChangePasswordPage } from '@/pages/auth/ChangePasswordPage';
+import { FirstLoginScreen } from '@/pages/auth/FirstLoginScreen';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { ForgetPasswordPage } from '@/pages/auth/ForgetPasswordPage';
 import CreateSupplierPage from '@/pages/dashboard/suppliers/CreateSupplierPage';
@@ -24,6 +24,7 @@ import UpdateSupplierPage from '@/pages/dashboard/suppliers/UpdateSuplierPage';
 import AgentsView from '@/pages/dashboard/Agents/AgentsView';
 import UpdateAgentPage from '@/pages/dashboard/Agents/UpdateAgentPage';
 import CreateAgentPage from '@/pages/dashboard/Agents/CreateAgentPage';
+import { ChangePasswordPage } from '@/pages/auth/ChangePasswordPage copy';
 
 interface HiddenRoute {
     path: string;
@@ -175,8 +176,15 @@ export const routes = [
                 <ChangePasswordPage />
             </ProtectedAuth>,
     },
+    {
+        path: '/auth/first-login',
+        element:
+            <ProtectedAuth>
+                <FirstLoginScreen />
+            </ProtectedAuth>,
+    },
     ...modules.flatMap((section) =>
-       
+
         flattenRoutes(section.items)
     ),
     ...hiddenRoutes.map((route) => ({
