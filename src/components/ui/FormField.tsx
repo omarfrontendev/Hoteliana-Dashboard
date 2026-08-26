@@ -4,11 +4,9 @@ import { Controller, get } from "react-hook-form";
 import SelectMenu from "./SelectMenu";
 import { MapEditor } from "./MapEditor";
 import { useTranslation } from "react-i18next";
-import ProfilePhotoUpload from "./ProfilePhotoUpload";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { Textarea } from "./textarea";
-import { useUploadFile } from "@/hooks/useUpload";
 
 export default function FormField({ form, label, name, placeholder, colSpan, required, type, list, isLoading, selectedCoords, isMulti, ...props }: any) {
 
