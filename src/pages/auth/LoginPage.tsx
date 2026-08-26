@@ -141,7 +141,6 @@ export function LoginPage() {
               </div>
 
               {/* Login Form */}
-              {/* <form onSubmit={showPassField ? handleLogin : show2FA ? verifyOTP : handleCheckEmailState} className="space-y-6"> */}
               <form onSubmit={onSubmit} className="space-y-6">
 
                 <>
