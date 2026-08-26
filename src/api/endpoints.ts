@@ -21,6 +21,23 @@ const suppliers = {
     deleteSupplier: (id: string) => `/suppliers/${id}`,
 }
 
+const agents = {
+    getAllAgents: "/agents?page=1&limit=100",
+    getAgents: "/agents",
+    createAgent: "/agents",
+    getAgentById: (id: string) => `/agents/${id}`,
+    deactivateAgent: (id: string) => `/agents/${id}/deactivate`,
+    activateAgent: (id: string) => `/agents/${id}/activate`,
+    updateAgent: (id: string) => `/agents/${id}`,
+    deleteSupplier: (id: string) => `/agents/${id}`,
+}
+
+const uploads = {
+    create: '/hoteliana/uploads',
+    getMetadata: (id: number) => `/hoteliana/uploads/${id}`,
+    getContent: (id: number) => `/hoteliana/uploads/${id}/content`,
+};
+
 const auth = {
     login: "auth/login",
     changePassword: "auth/reset-password",
@@ -119,6 +136,8 @@ export const endpoints = {
     auth,
     users,
     suppliers,
+    agents,
+    uploads,
     areas,
     regions,
     subRegions,

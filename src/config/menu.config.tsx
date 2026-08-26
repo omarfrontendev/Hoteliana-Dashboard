@@ -24,6 +24,9 @@ import { ForgetPasswordPage } from '@/pages/auth/ForgetPasswordPage';
 import CreateSupplierPage from '@/pages/dashboard/suppliers/CreateSupplierPage';
 import SuppliersView from '@/pages/dashboard/suppliers/SuppliersView';
 import UpdateSupplierPage from '@/pages/dashboard/suppliers/UpdateSuplierPage';
+import AgentsView from '@/pages/dashboard/Agents/AgentsView';
+import UpdateAgentPage from '@/pages/dashboard/Agents/UpdateAgentPage';
+import CreateAgentPage from '@/pages/dashboard/Agents/CreateAgentPage';
 // import { ChangePasswordPage } from '@/pages/auth/ChangePasswordPage';
 
 interface HiddenRoute {
@@ -185,6 +188,12 @@ export const modules: ModuleSection[] = [
                         path: '/suppliers',
                         element: <SuppliersView />,
                     },
+                    {
+                        icon: Users2,
+                        label: 'Agents',
+                        path: '/agents',
+                        element: <AgentsView />,
+                    },
                 ]
             },
             // {
@@ -261,6 +270,14 @@ export const hiddenRoutes: HiddenRoute[] = [
     {
         path: '/dashboard-users/:id/edit',
         element: <UpdateDashboardUser />,
+    },
+    {
+        path: '/agents/create',
+        element: <CreateAgentPage />,
+    },
+    {
+        path: '/agents/:id/edit',
+        element: <UpdateAgentPage />,
     },
     // {
     //     path: '/mobile-users/create',
