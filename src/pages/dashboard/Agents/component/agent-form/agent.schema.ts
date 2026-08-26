@@ -86,14 +86,36 @@ export const SupplierSchema = z.object({
             .email('Invalid owner email address'),
     }),
 
-    // documents: z.object({
-    //     commercialRegistrationUploadId: z.number().min(1),
-    //     taxCertificateUploadId: z.number().min(1),
-    //     tourismLicenseUploadId: z.number().min(1),
-    //     supplierContractUploadId: z.number().min(1),
-    //     companyOwnerIdUploadId: z.number().min(1),
-    //     bankGuaranteeLetterUploadId: z.number().min(1),
-    // }),
+
+    mainUser: z.object({
+        email: z.string()
+            .trim()
+            .nonempty({ message: 'emailRequired' })
+            .email({ message: 'invalidEmail' }),
+
+        username: z
+            .string()
+            .trim()
+            .nonempty({ message: 'username' }),
+        role: z
+            .string()
+            .nonempty({ message: 'roleRequired' }),
+
+        phoneNumber: z
+            .string()
+            .trim()
+            .nonempty({ message: 'phoneRequired' }),
+        permissionProfileIds: z.number().nullable(),
+    }),
+
+
+    documents: z.object({
+        commercialRegistrationUploadId: z.any(),
+        taxCertificateUploadId: z.any(),
+        tourismLicenseUploadId: z.any(),
+        companyOwnerIdUploadId: z.any(),
+        bankGuaranteeLetterUploadId: z.any(),
+    }),
 });
 
 export type SupplierFormValues = z.infer<

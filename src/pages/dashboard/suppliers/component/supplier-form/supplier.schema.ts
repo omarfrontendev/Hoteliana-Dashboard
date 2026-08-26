@@ -93,7 +93,6 @@ export const SupplierSchema = z.object({
 
     documents: z.object({
         commercialRegistrationUploadId: z.any(),
-        // taxCertificateUploadId: z.number().min(1),
         taxCertificateUploadId: z.any(),
         tourismLicenseUploadId: z.any(),
         supplierContractUploadId: z.any(),

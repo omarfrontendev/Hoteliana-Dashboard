@@ -6,14 +6,25 @@ import { Button } from '@/components/ui/button';
 import FormField from '@/components/ui/FormField';
 import { useUpsertSupplier } from './useUpsertSupplier';
 import { SupplierSchema, type SupplierFormValues } from './supplier.schema';
-import { supplierFields } from './supplier.elements';
-import { useNavigate } from 'react-router-dom';
+import { supplierSections } from './supplier.elements';
 import { useUploadFile } from '@/hooks/useUpload';
+import { useState } from 'react';
+import SupplierAdminForm from './supplier-admin-form/SupplierAdminForm';
+import { City, Country } from 'country-state-city';
+import { useTranslation } from 'react-i18next';
 
 export const SupplierForm = () => {
-    const navigate = useNavigate();
+    const [supplierId, setSupplierId] = useState(null);
     const { mutateAsync: uploadFile, isPending: isUploadingFile } = useUploadFile();
     const { mutate: createSupplier, isPending } = useUpsertSupplier();
+    const { t } = useTranslation();
+
+    const countries = Country.getAllCountries();
+
+    const countryOptions = countries.map((country) => ({
+        label: country.name,
+        value: country.isoCode,
+    }));
 
     const form = useForm<SupplierFormValues>({
         resolver: zodResolver(SupplierSchema),
@@ -49,6 +60,16 @@ export const SupplierForm = () => {
 
         mode: 'all',
     });
+
+    const countryCode = form.watch("countryCode");
+    const cities = countryCode
+        ? City.getCitiesOfCountry(countryCode)
+        : [];
+
+    const citiesOptions = cities.map((city) => ({
+        label: city.name,
+        value: city.stateCode,
+    }));
 
     const onSubmit = async (
         values: SupplierFormValues
@@ -118,15 +139,19 @@ export const SupplierForm = () => {
             };
 
             await createSupplier(finalBody, {
-                onSuccess: () => {
+                onSuccess: (e) => {
                     form.reset();
-                    navigate("/suppliers");
+                    setSupplierId(e.data.supplierId)
                 },
             });
         } catch (error) {
             console.error(error);
         }
     };
+
+    if (supplierId) return (
+        <SupplierAdminForm id={supplierId} />
+    )
 
     return (
         <Form {...form}>
@@ -146,15 +171,37 @@ export const SupplierForm = () => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-12 gap-4">
-                        {supplierFields().map((field: any) => (
-                            <FormField
-                                key={field.name}
-                                form={form}
-                                {...field}
-                            />
-                        ))}
-                    </div>
+                    {supplierSections(
+                        countryOptions,
+                        citiesOptions
+                    ).map((section) => (
+                        <div
+                            key={section.title}
+                            className="w-full"
+                        >
+                            <div className="mb-6">
+                                <h2 className="text-lg font-semibold">
+                                    {t(`${section.title}`)}
+                                </h2>
+
+                                <p className="text-sm text-gray-500">
+                                    {t(
+                                        `${section.description}`
+                                    )}
+                                </p>
+                            </div>
+
+                            <div className="grid grid-cols-12 gap-4">
+                                {section.fields.map((field: any) => (
+                                    <FormField
+                                        key={field.name}
+                                        form={form}
+                                        {...field}
+                                    />
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
                 <Button

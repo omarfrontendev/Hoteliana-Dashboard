@@ -6,19 +6,34 @@ import { Button } from '@/components/ui/button';
 import FormField from '@/components/ui/FormField';
 import { SupplierSchema, type SupplierFormValues } from './agent.schema';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import { useUpsertAgent } from './useUpsertAgent';
-import { useSingleAgent } from '@/hooks/agents/useSingleAgent';
 import { AgentFields } from './agent.elements';
+import { useAllPermissions } from '@/hooks/permissions/usePermissions';
+import { dashboardUserRoles } from '@/constants/userRoles';
+import { useUploadFile } from '@/hooks/useUpload';
+import { useTranslation } from 'react-i18next';
+import { City, Country } from 'country-state-city';
 
 
 
-export const AgentForm = ({ id }: { id?: string }) => {
+export const AgentForm = () => {
     const navigate = useNavigate();
+    const { mutateAsync: uploadFile, isPending: isUploadingFile } = useUploadFile();
     const { mutate: createAgent, isPending } = useUpsertAgent();
+    const { t } = useTranslation();
+
+    const countries = Country.getAllCountries();
+
+    const countryOptions = countries.map((country) => ({
+        label: country.name,
+        value: country.isoCode,
+    }));
+
+    const { permissionsProfiles, isLoading } = useAllPermissions();
+    const profilesOptions = permissionsProfiles.map((item: any) => ({ label: item.nameEn, value: item.id }));
 
     // get user data if id is provided
-    const { agent } = useSingleAgent(id);
+    // const { agent } = useSingleAgent(id);
 
     const form = useForm<SupplierFormValues>({
         resolver: zodResolver(SupplierSchema),
@@ -42,90 +57,98 @@ export const AgentForm = ({ id }: { id?: string }) => {
                 email: '',
             },
 
-            // documents: {
-            //     commercialRegistrationUploadId: 0,
-            //     taxCertificateUploadId: 0,
-            //     tourismLicenseUploadId: 0,
-            //     supplierContractUploadId: 0,
-            //     companyOwnerIdUploadId: 0,
-            //     bankGuaranteeLetterUploadId: 0,
-            // },
+            documents: {
+                commercialRegistrationUploadId: 0,
+                taxCertificateUploadId: 0,
+                tourismLicenseUploadId: 0,
+                companyOwnerIdUploadId: 0,
+                bankGuaranteeLetterUploadId: 0,
+            },
         },
 
         mode: 'all',
     });
 
-    useEffect(() => {
-        if (!agent) return;
+    const countryCode = form.watch("countryCode");
+    const cities = countryCode
+        ? City.getCitiesOfCountry(countryCode)
+        : [];
 
-        form.reset({
-            legalCompanyNameEn: agent.legalCompanyNameEn ?? '',
-            legalCompanyNameAr: agent.legalCompanyNameAr ?? '',
-            countryCode: agent.countryCode ?? '',
-            city: agent.city ?? '',
-            phoneNumber: agent.phoneNumber ?? '',
-            email: agent.email ?? '',
-            commercialRegistrationNumber:
-                agent.commercialRegistrationNumber ?? '',
-            taxCertificateNumber: agent.taxCertificateNumber ?? '',
-            tourismLicenseNumber:
-                agent.tourismLicenseNumber ?? '',
-            bankIban: agent.bankIban ?? '',
-            contractEndDate: agent.contractEndDate ?? '',
+    const citiesOptions = cities.map((city) => ({
+        label: city.name,
+        value: city.stateCode,
+    }));
 
-            owner: {
-                name: agent.owner?.name ?? '',
-                phoneNumber: agent.owner?.phoneNumber ?? '',
-                email: agent.owner?.email ?? '',
-            },
+    const onSubmit = async (
+        values: SupplierFormValues
+    ) => {
+        try {
+            const {
+                documents,
+                ...supplierData
+            } = values;
 
-            // documents: {
-            //     commercialRegistrationUploadId:
-            //         agent.documents?.find(
-            //             (doc) =>
-            //                 doc.documentType === 'commercial_registration',
-            //         )?.uploadId ?? 0,
+            console.log(values)
 
-            //     taxCertificateUploadId:
-            //         agent.documents?.find(
-            //             (doc) =>
-            //                 doc.documentType === 'tax_certificate',
-            //         )?.uploadId ?? 0,
+            const [
+                commercialRegistration,
+                taxCertificate,
+                tourismLicense,
+                companyOwnerId,
+                bankGuaranteeLetter,
+            ] = await Promise.all([
+                await uploadFile({
+                    file: documents.commercialRegistrationUploadId,
+                    category: "commercial_registration",
+                }),
+                await uploadFile({
+                    file: documents.taxCertificateUploadId,
+                    category: "tax_certificate",
+                }),
+                await uploadFile({
+                    file: documents.tourismLicenseUploadId,
+                    category: "tourism_license",
+                }),
+                await uploadFile({
+                    file: documents.companyOwnerIdUploadId,
+                    category: "company_owner_id",
+                }),
+                await uploadFile({
+                    file: documents.bankGuaranteeLetterUploadId,
+                    category: "bank_guarantee_letter",
+                }),
+            ]);
 
-            //     tourismLicenseUploadId:
-            //         agent.documents?.find(
-            //             (doc) =>
-            //                 doc.documentType === 'tourism_license',
-            //         )?.uploadId ?? 0,
+            const finalBody = {
+                ...supplierData,
 
-            //     supplierContractUploadId:
-            //         supplier.documents?.find(
-            //             (doc) =>
-            //                 doc.documentType === 'supplier_contract',
-            //         )?.uploadId ?? 0,
+                documents: {
+                    commercialRegistrationUploadId:
+                        commercialRegistration.uploadId,
 
-            //     companyOwnerIdUploadId:
-            //         supplier.documents?.find(
-            //             (doc) =>
-            //                 doc.documentType === 'company_owner_id',
-            //         )?.uploadId ?? 0,
+                    taxCertificateUploadId:
+                        taxCertificate.uploadId,
 
-            //     bankGuaranteeLetterUploadId:
-            //         supplier.documents?.find(
-            //             (doc) =>
-            //                 doc.documentType === 'bank_guarantee_letter',
-            //         )?.uploadId ?? 0,
-            // },
-        });
-    }, [agent, form]);
+                    tourismLicenseUploadId:
+                        tourismLicense.uploadId,
 
-    const onSubmit = (data: SupplierFormValues) => {
-        createAgent(data, {
-            onSuccess: () => {
-                form.reset();
-                navigate("/agents");
-            },
-        });
+                    companyOwnerIdUploadId:
+                        companyOwnerId.uploadId,
+
+                    bankGuaranteeLetterUploadId:
+                        bankGuaranteeLetter.uploadId,
+                },
+            };
+
+            await createAgent(finalBody, {
+                onSuccess: () => {
+                    form.reset();
+                    navigate("/agents");
+                },
+            });
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -146,23 +169,44 @@ export const AgentForm = ({ id }: { id?: string }) => {
                         </p>
                     </div>
 
-                    <div className="grid grid-cols-12 gap-4">
-                        {AgentFields().map((field: any) => (
-                            <FormField
-                                key={field.name}
-                                form={form}
-                                {...field}
-                            />
-                        ))}
+                    <div className="grid gap-4">
+                        {AgentFields(dashboardUserRoles, profilesOptions, isLoading, countryOptions, citiesOptions).map(
+                                (section) => (
+                                    <section
+                                        key={section.title}
+                                        className="w-full rounded-xl bg-white"
+                                    >
+                                        <div className="mb-6">
+                                            <h2 className="text-lg font-semibold">
+                                                {t(`sections.${section.title}`)}
+                                            </h2>
+
+                                            <p className="text-sm text-gray-500">
+                                                {t(`sections.${section.description}`)}
+                                            </p>
+                                        </div>
+
+                                        <div className="grid grid-cols-12 gap-4">
+                                            {section.fields.map((field: any) => (
+                                                <FormField
+                                                    key={field.name}
+                                                    form={form}
+                                                    {...field}
+                                                />
+                                            ))}
+                                        </div>
+                                    </section>
+                                ),
+                            )}
                     </div>
                 </div>
 
                 <Button
                     type="submit"
-                    disabled={isPending}
+                    disabled={isPending || isUploadingFile}
                     className="h-12 w-full"
                 >
-                    {isPending ? 'Saving...' : 'Create Supplier'}
+                    {isPending || isUploadingFile ? 'Saving...' : 'Create Agent'}
                 </Button>
             </form>
         </Form>

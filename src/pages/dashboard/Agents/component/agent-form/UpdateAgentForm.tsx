@@ -4,23 +4,30 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import FormField from '@/components/ui/FormField';
-import { useUpsertSupplier } from './useUpsertSupplier';
-import { SupplierSchema, type SupplierFormValues } from './supplier.schema';
-import { updateSupplierFields } from './supplier.elements';
 import { useNavigate } from 'react-router-dom';
-import { useSingleSupplier } from '@/hooks/suppliers/useSingleSupplier';
 import { useEffect } from 'react';
 import { useUploadFile, type UploadCategory } from '@/hooks/useUpload';
 import { mapSupplierDocuments } from '@/utils/helper';
-import { useTranslation } from 'react-i18next';
+import { useUpsertAgent } from './useUpsertAgent';
+import { SupplierSchema, type SupplierFormValues } from './agent.schema';
+import { updateAgentFields } from './agent.elements';
+import { useAllPermissions } from '@/hooks/permissions/usePermissions';
+import { dashboardUserRoles } from '@/constants/userRoles';
+import { useSingleAgent } from '@/hooks/agents/useSingleAgent';
 import { City, Country } from 'country-state-city';
+import { useTranslation } from 'react-i18next';
 
-export const UpdateSupplierForm = ({ id }: { id?: string }) => {
+export const UpdateAgentForm = ({ id }: { id?: string }) => {
     const navigate = useNavigate();
     const { mutateAsync: uploadFile, isPending: isUploadingFile } = useUploadFile();
-    const { mutate: createSupplier, isPending } = useUpsertSupplier({ id });
-    const { t } = useTranslation();
+    const { mutate: createAgent, isPending } = useUpsertAgent({ id });
 
+    const { permissionsProfiles, isLoading } = useAllPermissions();
+    const profilesOptions = permissionsProfiles.map((item: any) => ({ label: item.nameEn, value: item.id }));
+
+    // get user data if id is provided
+    const { agent } = useSingleAgent(id);
+    const { t } = useTranslation();
 
     const countries = Country.getAllCountries();
 
@@ -28,9 +35,6 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
         label: country.name,
         value: country.isoCode,
     }));
-
-    // get user data if id is provided
-    const { supplier } = useSingleSupplier(id);
 
     const form = useForm<SupplierFormValues>({
         resolver: zodResolver(SupplierSchema),
@@ -58,7 +62,6 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
                 commercialRegistrationUploadId: 0,
                 taxCertificateUploadId: 0,
                 tourismLicenseUploadId: 0,
-                supplierContractUploadId: 0,
                 companyOwnerIdUploadId: 0,
                 bankGuaranteeLetterUploadId: 0,
             },
@@ -78,54 +81,40 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
     }));
 
     useEffect(() => {
-        if (!supplier) return;
+        if (!agent) return;
 
         form.reset({
-            legalCompanyNameEn:
-                supplier.legalCompanyNameEn ?? "",
-
-            legalCompanyNameAr:
-                supplier.legalCompanyNameAr ?? "",
-
-            countryCode:
-                supplier.countryCode ?? "",
-
-            city:
-                supplier.city ?? "",
-
-            phoneNumber:
-                supplier.phoneNumber ?? "",
-
-            email:
-                supplier.email ?? "",
-
+            legalCompanyNameEn: agent.legalCompanyNameEn ?? '',
+            legalCompanyNameAr: agent.legalCompanyNameAr ?? '',
+            countryCode: agent.countryCode ?? '',
+            city: agent.city ?? '',
+            phoneNumber: agent.phoneNumber ?? '',
+            email: agent.email ?? '',
             commercialRegistrationNumber:
-                supplier.commercialRegistrationNumber ?? "",
-
-            taxCertificateNumber:
-                supplier.taxCertificateNumber ?? "",
-
+                agent.commercialRegistrationNumber ?? '',
+            taxCertificateNumber: agent.taxCertificateNumber ?? '',
             tourismLicenseNumber:
-                supplier.tourismLicenseNumber ?? "",
-
-            bankIban:
-                supplier.bankIban ?? "",
-
-            contractEndDate:
-                supplier.contractEndDate ?? "",
+                agent.tourismLicenseNumber ?? '',
+            bankIban: agent.bankIban ?? '',
+            contractEndDate: agent.contractEndDate ?? '',
 
             owner: {
-                name: supplier.owner?.name ?? "",
-                phoneNumber:
-                    supplier.owner?.phoneNumber ?? "",
-                email: supplier.owner?.email ?? "",
+                name: agent.owner?.name ?? '',
+                phoneNumber: agent.owner?.phoneNumber ?? '',
+                email: agent.owner?.email ?? '',
             },
-
+            mainUser: {
+                email: agent?.users[0].email,
+                username: agent?.users[0].username,
+                phoneNumber: agent?.users[0].phoneNumber,
+                role: agent?.users[0].role,
+                permissionProfileIds: agent?.users[0]?.permissionProfileIds?.[0],
+            },
             documents: mapSupplierDocuments(
-                supplier.documents
+                agent.documents
             ),
         });
-    }, [supplier, form]);
+    }, [agent, form]);
 
     const resolveUploadId = async (
         document: {
@@ -161,7 +150,6 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
                 commercialRegistrationUploadId,
                 taxCertificateUploadId,
                 tourismLicenseUploadId,
-                supplierContractUploadId,
                 companyOwnerIdUploadId,
                 bankGuaranteeLetterUploadId,
             ] = await Promise.all([
@@ -178,11 +166,6 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
                 resolveUploadId(
                     documents.tourismLicenseUploadId,
                     "tourism_license"
-                ),
-
-                resolveUploadId(
-                    documents.supplierContractUploadId,
-                    "supplier_contract"
                 ),
 
                 resolveUploadId(
@@ -203,16 +186,15 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
                     commercialRegistrationUploadId,
                     taxCertificateUploadId,
                     tourismLicenseUploadId,
-                    supplierContractUploadId,
                     companyOwnerIdUploadId,
                     bankGuaranteeLetterUploadId,
                 },
             };
 
-            await createSupplier(finalBody, {
+            await createAgent(finalBody, {
                 onSuccess: () => {
                     form.reset();
-                    navigate("/suppliers");
+                    navigate("/agents");
                 },
             });
         } catch (error) {
@@ -239,18 +221,15 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
                     </div>
 
                     <div className="grid gap-4">
-                        {updateSupplierFields(countryOptions, citiesOptions).map((section) => (
-                            <section
-                                key={section.title}
-                                className="w-full rounded-xl bg-white"
-                            >
-                                <div className="mb-6">
+                        {updateAgentFields(dashboardUserRoles, profilesOptions, isLoading, countryOptions, citiesOptions).map((section: any) => (
+                            <section key={section.section}>
+                                <div className="">
                                     <h2 className="text-lg font-semibold">
-                                        {t(`${section.title}`)}
+                                        {t(`sections.${section.section}.title`)}
                                     </h2>
 
-                                    <p className="text-sm text-gray-500">
-                                        {t(`${section.description}`)}
+                                    <p className="text-sm text-muted-foreground">
+                                        {t(`sections.${section.section}.description`)}
                                     </p>
                                 </div>
 
@@ -273,7 +252,7 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
                     disabled={isPending || isUploadingFile}
                     className="h-12 w-full"
                 >
-                    {isPending || isUploadingFile ? 'Saving...' : 'Create Supplier'}
+                    {isPending || isUploadingFile ? 'Saving...' : 'Create_Agent'}
                 </Button>
             </form>
         </Form>

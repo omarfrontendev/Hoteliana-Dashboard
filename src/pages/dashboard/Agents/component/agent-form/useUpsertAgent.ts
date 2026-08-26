@@ -5,38 +5,44 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import type { SupplierFormValues } from './agent.schema';
 
+type Params = {
+  id?: string;
+};
 
-export const useUpsertAgent
- = () => {
+export const useUpsertAgent = ({ id }: Params = {}) => {
   const queryClient = useQueryClient();
+  const isEdit = Boolean(id);
   const { t } = useTranslation();
 
   return useMutation({
     mutationFn: async (body: SupplierFormValues) => {
-      const { data } = await api.post(
-        endpoints.suppliers.createSupplier,
-        body,
-      );
+      const url = isEdit
+        ? endpoints.agents.updateAgent(id!)
+        : endpoints.agents.createAgent;
+
+      const method = isEdit ? 'patch' : 'post';
+
+      const { data } = await api[method](url, body);
 
       return data;
     },
 
-    onSuccess: () => {
+    onSuccess: (res) => {
       toast.success(
-        t('suppliers.successCreate'),
+        res?.message || t('successCreate'),
       );
 
       queryClient.invalidateQueries({
-        queryKey: ['suppliers'],
+        queryKey: ['agents'],
       });
     },
 
     onError: (error: any) => {
       toast.error(
         error?.response?.data?.message ||
-          t('common.saveFailed', {
-            entity: t('entities.supplier'),
-          }),
+        t('common.saveFailed', {
+          entity: t('entities.agent'),
+        }),
       );
     },
   });

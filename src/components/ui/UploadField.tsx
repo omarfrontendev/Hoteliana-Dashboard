@@ -27,25 +27,39 @@ export const UploadField = ({
         isLoading,
     } = useGetUploadContent(uploadId);
 
+    // File when user selects a new file
+    const updatedFile = form.watch(name);
+
     const { t } = useTranslation();
 
     const [previewUrl, setPreviewUrl] =
         useState<string | null>(null);
 
     useEffect(() => {
-        if (!blob) {
-            setPreviewUrl(null);
-            return;
+        // New file selected
+        if (updatedFile instanceof File) {
+            const url = URL.createObjectURL(updatedFile);
+
+            setPreviewUrl(url);
+
+            return () => {
+                URL.revokeObjectURL(url);
+            };
         }
 
-        const url = URL.createObjectURL(blob);
+        // Existing file from API
+        if (blob) {
+            const url = URL.createObjectURL(blob);
 
-        setPreviewUrl(url);
+            setPreviewUrl(url);
 
-        return () => {
-            URL.revokeObjectURL(url);
-        };
-    }, [blob]);
+            return () => {
+                URL.revokeObjectURL(url);
+            };
+        }
+
+        setPreviewUrl(null);
+    }, [blob, updatedFile]);
 
     const handleChange = (
         event: React.ChangeEvent<HTMLInputElement>
@@ -69,7 +83,7 @@ export const UploadField = ({
             </Label>
 
             {/* Existing file */}
-            {uploadId && (
+            {uploadId && !(updatedFile instanceof File) && (
                 <div className="rounded-lg border p-3">
                     {isLoading && (
                         <p className="text-sm text-muted-foreground">
@@ -81,6 +95,19 @@ export const UploadField = ({
                         <img
                             src={previewUrl}
                             alt="Current document"
+                            className="h-32 w-32 rounded-md object-cover"
+                        />
+                    )}
+                </div>
+            )}
+
+            {/* New selected file */}
+            {updatedFile instanceof File && (
+                <div className="rounded-lg border p-3">
+                    {updatedFile.type.startsWith("image/") && previewUrl && (
+                        <img
+                            src={previewUrl}
+                            alt={updatedFile.name}
                             className="h-32 w-32 rounded-md object-cover"
                         />
                     )}

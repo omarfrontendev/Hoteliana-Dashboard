@@ -1,7 +1,7 @@
 import { PageHeader } from '@/layout/components/PageHeader';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { AgentForm } from './component/agent-form';
+import { UpdateAgentForm } from './component/agent-form/UpdateAgentForm';
 
 export default function UpdateAgentPage() {
 
@@ -13,7 +13,7 @@ export default function UpdateAgentPage() {
             {/* Header */}
             <PageHeader title={t('Update Agent')}>
             </PageHeader>
-            <AgentForm id={id} />
+            <UpdateAgentForm id={id} />
         </div>
     );
 }

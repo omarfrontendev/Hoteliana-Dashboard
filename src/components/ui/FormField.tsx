@@ -33,12 +33,33 @@ export default function FormField({ form, label, name, placeholder, colSpan, req
     }
 
     if (type === "upload") {
+        const currentFile = form.watch(name);
+
+        const isImage =
+            currentFile instanceof File &&
+            currentFile.type.startsWith("image/");
+
+        const previewUrl = isImage
+            ? URL.createObjectURL(currentFile)
+            : null;
+
         return (
             <div className={`space-y-2 ${colSpan}`}>
                 <Label className="text-slate-700">
                     {t(`fields.${label}`)}
                     {required ? " *" : ""}
                 </Label>
+
+                {/* Image Preview */}
+                {previewUrl && (
+                    <div className="mt-3 rounded-lg border p-3">
+                        <img
+                            src={previewUrl}
+                            alt={currentFile.name}
+                            className="h-32 w-32 rounded-md object-cover"
+                        />
+                    </div>
+                )}
 
                 <Input
                     type="file"
@@ -55,14 +76,23 @@ export default function FormField({ form, label, name, placeholder, colSpan, req
                     }}
                 />
 
+                {/* PDF / File name */}
+                {currentFile instanceof File &&
+                    !isImage && (
+                        <div className="mt-2 rounded-md border p-3">
+                            <p className="text-sm">
+                                {currentFile.name}
+                            </p>
+                        </div>
+                    )}
+
                 {get(form.formState.errors, name) && (
                     <p className="text-xs text-destructive">
                         {t(
                             `validation.${get(
                                 form.formState.errors,
                                 name
-                            )?.message ?? ""
-                            }`
+                            )?.message ?? ""}`
                         )}
                     </p>
                 )}
@@ -73,15 +103,6 @@ export default function FormField({ form, label, name, placeholder, colSpan, req
     if (type === "spacer") {
         return <div className={colSpan} />;
     };
-
-    // if (type === "upload") {
-    //     return (
-    //         <div className={`space-y-2 ${colSpan}`}>
-    //             <Label className="text-slate-700">{t(`fields.${label}`)}{required ? " *" : ""}</Label>
-    //             <ProfilePhotoUpload />
-    //         </div>
-    //     )
-    // }
 
     if (type === "map") {
         return (
@@ -106,6 +127,11 @@ export default function FormField({ form, label, name, placeholder, colSpan, req
     }
 
     if (type === "select") {
+
+        const fieldError = get(
+            form.formState.errors,
+            name
+        );
 
         return (
             <div className={`space-y-2 ${colSpan} position-relative`}>
@@ -137,7 +163,7 @@ export default function FormField({ form, label, name, placeholder, colSpan, req
                     data-slot="form-message"
                     className={"text-xs font-normal text-destructive"}
                 >
-                    {form?.formState?.errors?.[name] && t(`validation.${form?.formState?.errors?.[name]?.message}`)}
+                    {fieldError && t(`validation.${fieldError?.message}`)}
                 </div>
             </div>
         )

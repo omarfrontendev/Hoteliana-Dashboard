@@ -14,6 +14,7 @@ const suppliers = {
     getAllSuppliers: "/suppliers?page=1&limit=100",
     getSuppliers: "/suppliers",
     createSupplier: "/suppliers",
+    createSuperAdmin:(id: string) => `/suppliers/${id}/super-admins`,
     getSupplierById: (id: string) => `/suppliers/${id}`,
     deactivateSupplier: (id: string) => `/suppliers/${id}/deactivate`,
     activateSupplier: (id: string) => `/suppliers/${id}/activate`,
