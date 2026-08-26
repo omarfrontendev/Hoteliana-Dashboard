@@ -8,34 +8,33 @@ import {
     type ColumnDef,
 } from "@tanstack/react-table";
 
-import { fetchUsers } from "@/app/store/features/users/usersThunk";
 import type { AppDispatch, RootState } from "@/app/store";
 import { userStatus } from "@/constants/userStatus";
-import { useUsersColumns } from "../components/UsersColumns";
-import type { User, UsersTableOptions } from "@/types/users";
+import type { UsersTableOptions } from "@/types/users";
 import { dashboardUserRoles } from "@/constants/userRoles";
+import { fetchSuppliers } from "@/app/store/features/suppliers/supliersThunk";
+import { useUsersColumns } from "../components/SuppliersColumns";
 
-export const useUsersTableLogic = () => {
+export const useSuppliersTableLogic = () => {
     const dispatch = useDispatch<AppDispatch>();
 
     const [statusDialog, setStatusDialog] = useState(null);
 
-    // Select users state from Redux store
-    const { users, loading, total } = useSelector((state: RootState) => state.users);
+    // Select suppliers state from Redux store
+    const { suppliers, loading, total } = useSelector((state: RootState) => state.suppliers);
 
     // Local state to trigger manual refresh
     const [refreshData, setRefreshData] = useState(false);
     
 
     // Table options state: pagination, search, and status filter
-    // @@TODO FIX TO USE GetUsersPayload
+    // @@TODO FIX TO USE GetSuppliersPayload
     const [tableOptions, setTableOptions] = useState<UsersTableOptions>({
         pageIndex: 0,
         pageSize: 10,
         search: "",
         isActive: null,
         isFirstActivationPending: null,
-        // roles: dashboardUserRoles.map(role => role.value)
     });
 
     // Fetch users whenever table options or refreshData changes
@@ -51,7 +50,7 @@ export const useUsersTableLogic = () => {
                 : null;
 
         dispatch(
-            fetchUsers({
+            fetchSuppliers({
                 page: pageIndex + 1, // API expects 1-based page
                 limit: pageSize,
                 search: search || undefined,
@@ -132,12 +131,12 @@ export const useUsersTableLogic = () => {
     );
 
     // Table columns definition
-    const columns: ColumnDef<User>[] = useUsersColumns(setRefreshData, setStatusDialog);
+    const columns: ColumnDef<any>[] = useUsersColumns(setRefreshData, setStatusDialog);
 
     // Initialize react-table instance with server-side pagination
     const table = useReactTable({
         columns,
-        data: users,
+        data: suppliers,
         pageCount: Math.ceil((total || 0) / tableOptions.pageSize),
         state: {
             pagination: {

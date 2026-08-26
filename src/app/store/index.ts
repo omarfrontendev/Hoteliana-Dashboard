@@ -17,6 +17,7 @@ import { vendorMallsSlice } from "./features/vendors-organization/malls/malls.sl
 import { vendorBoothsSlice } from "./features/vendors-organization/booths/booths.slice";
 import { vendorShiftsSlice } from "./features/vendors-organization/shifts/shifts.slice";
 import { vendorUsersSlice } from "./features/vendors-organization/users/users.slice";
+import { suppliersSlice } from "./features/suppliers/suppliers.slice";
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
     booths: boothsSlice.reducer,
     shifts: shiftsSlice.reducer,
     users: usersSlice.reducer,
+    suppliers: suppliersSlice.reducer,
     vendors: vendorsSlice.reducer,
     roles: rolesSlice.reducer,
     vendorsOfVendor: vendorsOfVendorsSlice.reducer,

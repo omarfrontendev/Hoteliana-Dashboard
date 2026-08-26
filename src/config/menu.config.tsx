@@ -2,6 +2,7 @@ import {
     UsersIcon,
     LayoutDashboard,
     Key,
+    Users2,
 } from 'lucide-react';
 // import Overview from '@/pages/dashboard/Overview';
 // import { LoginPage } from '@/pages/auth/LoginPage';
@@ -20,6 +21,9 @@ import UpdatePermissions from '@/pages/dashboard/permissions/UpdatePermissions';
 import { ChangePasswordPage } from '@/pages/auth/ChangePasswordPage';
 import { LoginPage } from '@/pages/auth/LoginPage';
 import { ForgetPasswordPage } from '@/pages/auth/ForgetPasswordPage';
+import CreateSupplierPage from '@/pages/dashboard/suppliers/CreateSupplierPage';
+import SuppliersView from '@/pages/dashboard/suppliers/SuppliersView';
+import UpdateSupplierPage from '@/pages/dashboard/suppliers/UpdateSuplierPage';
 // import { ChangePasswordPage } from '@/pages/auth/ChangePasswordPage';
 
 interface HiddenRoute {
@@ -175,6 +179,12 @@ export const modules: ModuleSection[] = [
                         path: '/roles',
                         element: <ViewPermissions />,
                     },
+                    {
+                        icon: Users2,
+                        label: 'Suppliers',
+                        path: '/suppliers',
+                        element: <SuppliersView />,
+                    },
                 ]
             },
             // {
@@ -264,10 +274,14 @@ export const hiddenRoutes: HiddenRoute[] = [
     //     path: '/vendors/create',
     //     element: <CreateVendor />,
     // },
-    // {
-    //     path: '/vendors/:id',
-    //     element: <VendorProfile />,
-    // },
+    {
+        path: '/suppliers/create',
+        element: <CreateSupplierPage />,
+    },
+    {
+        path: '/suppliers/:id/edit',
+        element: <UpdateSupplierPage />,
+    },
     {
         path: '/roles/create',
         element: <CreatePermissions />,

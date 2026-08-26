@@ -10,6 +10,17 @@ const users = {
     deleteUser: (id: string) => `/users/${id}`,
 };
 
+const suppliers = {
+    getAllSuppliers: "/suppliers?page=1&limit=100",
+    getSuppliers: "/suppliers",
+    createSupplier: "/suppliers",
+    getSupplierById: (id: string) => `/suppliers/${id}`,
+    deactivateSupplier: (id: string) => `/suppliers/${id}/deactivate`,
+    activateSupplier: (id: string) => `/suppliers/${id}/activate`,
+    updateSupplier: (id: string) => `/suppliers/${id}`,
+    deleteSupplier: (id: string) => `/suppliers/${id}`,
+}
+
 const auth = {
     login: "auth/login",
     changePassword: "auth/reset-password",
@@ -107,6 +118,7 @@ const childVendors = {
 export const endpoints = {
     auth,
     users,
+    suppliers,
     areas,
     regions,
     subRegions,
