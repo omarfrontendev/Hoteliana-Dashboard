@@ -1,8 +1,20 @@
 import { z } from 'zod';
 
 export const SupplierSchema = z.object({
-    legalCompanyNameEn: z.string().min(1, 'English company name is required'),
-    legalCompanyNameAr: z.string().min(1, 'Arabic company name is required'),
+    legalCompanyNameEn: z
+        .string()
+        .min(1, 'English company name is required')
+        .regex(
+            /^[A-Za-z0-9\s&.,'()-]+$/,
+            'English company name must contain only English characters',
+        ),
+    legalCompanyNameAr: z
+        .string()
+        .min(1, 'Arabic company name is required')
+        .regex(
+            /^[\u0600-\u06FF\s&.,'()-]+$/,
+            'Arabic company name must contain only Arabic characters',
+        ),
 
     countryCode: z.string().min(1, 'Country is required'),
     city: z.string().min(1, 'City is required'),
