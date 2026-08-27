@@ -49,12 +49,12 @@ export const SupplierForm = () => {
             },
 
             documents: {
-                commercialRegistrationUploadId: 0,
-                taxCertificateUploadId: 0,
-                tourismLicenseUploadId: 0,
-                supplierContractUploadId: 0,
-                companyOwnerIdUploadId: 0,
-                bankGuaranteeLetterUploadId: 0,
+                commercialRegistrationUploadId: undefined,
+                taxCertificateUploadId: undefined,
+                tourismLicenseUploadId: undefined,
+                supplierContractUploadId: undefined,
+                companyOwnerIdUploadId: undefined,
+                bankGuaranteeLetterUploadId: undefined,
             },
         },
 

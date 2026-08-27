@@ -108,14 +108,29 @@ export const SupplierSchema = z.object({
         permissionProfileIds: z.number().nullable(),
     }),
 
-
-    documents: z.object({
-        commercialRegistrationUploadId: z.any(),
-        taxCertificateUploadId: z.any(),
-        tourismLicenseUploadId: z.any(),
-        companyOwnerIdUploadId: z.any(),
-        bankGuaranteeLetterUploadId: z.any(),
-    }),
+    documents: z
+        .object({
+            commercialRegistrationUploadId: z.any(),
+            taxCertificateUploadId: z.any(),
+            tourismLicenseUploadId: z.any(),
+            companyOwnerIdUploadId: z.any(),
+            bankGuaranteeLetterUploadId: z.any(),
+        })
+        .superRefine((documents, ctx) => {
+            Object.entries(documents).forEach(([key, value]) => {
+                if (
+                    value === undefined ||
+                    value === null ||
+                    value === ''
+                ) {
+                    ctx.addIssue({
+                        code: z.ZodIssueCode.custom,
+                        path: [key],
+                        message: 'Document is required',
+                    });
+                }
+            });
+        }),
 });
 
 export type SupplierFormValues = z.infer<

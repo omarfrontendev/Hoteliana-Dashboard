@@ -49,7 +49,7 @@ export const AgentFields = (
                     label: "phoneNumber",
                     placeholder: "phoneNumber",
                     colSpan: "col-span-6",
-                    type: "text",
+                    type: "number",
                     required: true,
                 },
                 {
@@ -127,7 +127,7 @@ export const AgentFields = (
                     label: "phoneNumber",
                     placeholder: "phoneNumber",
                     colSpan: "col-span-6",
-                    type: "text",
+                    type: "number",
                     required: true,
                 },
                 {
@@ -292,7 +292,7 @@ export const updateAgentFields = (
                     label: 'phoneNumber',
                     placeholder: 'phoneNumber',
                     colSpan: 'col-span-6',
-                    type: 'text',
+                    type: 'number',
                     required: true,
                 },
                 {
@@ -365,7 +365,7 @@ export const updateAgentFields = (
                     label: 'owner.phoneNumber',
                     placeholder: 'owner.phoneNumber',
                     colSpan: 'col-span-4',
-                    type: 'text',
+                    type: 'number',
                     required: true,
                 },
                 {

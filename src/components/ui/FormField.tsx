@@ -33,6 +33,7 @@ export default function FormField({ form, label, name, placeholder, colSpan, req
     }
 
     if (type === "upload") {
+
         const currentFile = form.watch(name);
 
         const isImage =

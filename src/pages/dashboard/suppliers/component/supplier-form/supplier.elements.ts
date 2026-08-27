@@ -46,7 +46,7 @@ export const supplierSections = (
                     label: 'phoneNumber',
                     placeholder: 'phoneNumber',
                     colSpan: 'col-span-6',
-                    type: 'text',
+                    type: 'number',
                     required: true,
                 },
                 {
@@ -77,7 +77,7 @@ export const supplierSections = (
                     label: 'phoneNumber',
                     placeholder: 'phoneNumber',
                     colSpan: 'col-span-4',
-                    type: 'text',
+                    type: 'number',
                     required: true,
                 },
                 {
@@ -240,7 +240,7 @@ export const updateSupplierFields = (countryOptions: any[], citiesOptions: any[]
                     label: "phoneNumber",
                     placeholder: "phoneNumber",
                     colSpan: "col-span-6",
-                    type: "text",
+                    type: "number",
                     required: true,
                 },
                 {
@@ -318,7 +318,7 @@ export const updateSupplierFields = (countryOptions: any[], citiesOptions: any[]
                     label: "owner.phoneNumber",
                     placeholder: "owner.phoneNumber",
                     colSpan: "col-span-4",
-                    type: "text",
+                    type: "number",
                     required: true,
                 },
                 {
