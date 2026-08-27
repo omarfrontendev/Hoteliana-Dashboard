@@ -255,7 +255,7 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
                     disabled={isPending || isUploadingFile}
                     className="h-12 w-full"
                 >
-                    {isPending || isUploadingFile ? 'Saving...' : 'Create_Agent'}
+                    {isPending || isUploadingFile ? 'Saving...' : 'Update Agent'}
                 </Button>
             </form>
         </Form>

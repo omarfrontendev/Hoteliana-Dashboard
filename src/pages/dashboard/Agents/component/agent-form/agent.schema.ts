@@ -34,6 +34,41 @@ export const SupplierSchema = z.object({
         .string()
         .min(1, 'Tourism license number is required'),
 
+    // bankIban: z
+    //     .string()
+    //     .min(1, 'Bank IBAN is required')
+    //     .refine(
+    //         (value) => {
+    //             const iban = value.replace(/\s/g, '').toUpperCase();
+
+    //             if (!/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(iban)) {
+    //                 return false;
+    //             }
+
+    //             const rearranged = iban.slice(4) + iban.slice(0, 4);
+
+    //             const numeric = rearranged
+    //                 .split('')
+    //                 .map((char) =>
+    //                     /[A-Z]/.test(char)
+    //                         ? (char.charCodeAt(0) - 55).toString()
+    //                         : char,
+    //                 )
+    //                 .join('');
+
+    //             let remainder = 0;
+
+    //             for (const digit of numeric) {
+    //                 remainder = (remainder * 10 + Number(digit)) % 97;
+    //             }
+
+    //             return remainder === 1;
+    //         },
+    //         {
+    //             message: 'Please enter a valid IBAN',
+    //         },
+    //     ),
+
     bankIban: z
         .string()
         .min(1, 'Bank IBAN is required')
@@ -41,12 +76,38 @@ export const SupplierSchema = z.object({
             (value) => {
                 const iban = value.replace(/\s/g, '').toUpperCase();
 
+                // Basic IBAN format
                 if (!/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(iban)) {
                     return false;
                 }
 
+                // IBAN country-specific lengths
+                const ibanLengths: Record<string, number> = {
+                    EG: 29,
+                    SA: 24,
+                    AE: 23,
+                    QA: 29,
+                    KW: 30,
+                    BH: 22,
+                    JO: 30,
+                    GB: 22,
+                    DE: 22,
+                    FR: 27,
+                };
+
+                const countryCode = iban.slice(0, 2);
+
+                if (
+                    ibanLengths[countryCode] &&
+                    iban.length !== ibanLengths[countryCode]
+                ) {
+                    return false;
+                }
+
+                // Move first 4 characters to the end
                 const rearranged = iban.slice(4) + iban.slice(0, 4);
 
+                // Convert letters to numbers
                 const numeric = rearranged
                     .split('')
                     .map((char) =>
@@ -56,6 +117,7 @@ export const SupplierSchema = z.object({
                     )
                     .join('');
 
+                // Mod-97 validation
                 let remainder = 0;
 
                 for (const digit of numeric) {
