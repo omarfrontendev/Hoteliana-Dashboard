@@ -406,7 +406,7 @@ export const updateAgentFields = (
                     label: "phone.label",
                     placeholder: "phone.placeholder",
                     colSpan: "col-span-6",
-                    type: "number",
+                    type: "text",
                 },
                 {
                     name: "mainUser.role",
