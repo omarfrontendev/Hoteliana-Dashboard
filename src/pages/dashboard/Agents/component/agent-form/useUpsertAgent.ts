@@ -29,7 +29,7 @@ export const useUpsertAgent = ({ id }: Params = {}) => {
 
     onSuccess: (res) => {
       toast.success(
-        res?.message || t('successCreate'),
+        res?.message || t(id ?'success Create' : "Success Update"),
       );
 
       queryClient.invalidateQueries({

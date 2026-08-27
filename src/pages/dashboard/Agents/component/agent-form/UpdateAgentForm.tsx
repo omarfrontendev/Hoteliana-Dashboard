@@ -116,8 +116,6 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
         });
     }, [agent, form]);
 
-    console.log("Phone number", agent?.phoneNumber);
-    console.log("Form Data", form.watch("phoneNumber"));
 
     const resolveUploadId = async (
         document: {

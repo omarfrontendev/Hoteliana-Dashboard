@@ -4,6 +4,7 @@ import { Label } from "@/components/ui/label";
 import { useGetUploadContent } from "@/hooks/useUpload";
 import { useTranslation } from "react-i18next";
 import { get } from "lodash";
+import { FileText } from "lucide-react";
 
 interface UploadFieldProps {
     name: string;
@@ -83,6 +84,7 @@ export const UploadField = ({
             </Label>
 
             {/* Existing file */}
+            {/* Existing file */}
             {uploadId && !(updatedFile instanceof File) && (
                 <div className="rounded-lg border p-3">
                     {isLoading && (
@@ -91,25 +93,67 @@ export const UploadField = ({
                         </p>
                     )}
 
-                    {previewUrl && (
-                        <img
-                            src={previewUrl}
-                            alt="Current document"
-                            className="h-32 w-32 rounded-md object-cover"
-                        />
+                    {previewUrl && blob?.type === "application/pdf" ? (
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-md bg-red-50">
+                                <FileText className="h-6 w-6 text-red-600" />
+                            </div>
+
+                            <div>
+                                <p className="text-sm font-medium">
+                                    PDF Document
+                                </p>
+
+                                <p className="text-xs text-muted-foreground">
+                                    {form.watch(name)?.originalName ? form.watch(name)?.originalName : "PDF file"}
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        previewUrl && (
+                            <>
+                                <img
+                                    src={previewUrl}
+                                    alt="Current document"
+                                    className="h-32 w-32 rounded-md object-cover"
+                                />
+                                <p className="text-xs text-muted-foreground mt-3">
+                                    {form.watch(name)?.originalName ? form.watch(name)?.originalName : "PDF file"}
+                                </p>
+                            </>
+                        )
                     )}
                 </div>
             )}
 
             {/* New selected file */}
+            {/* New selected file */}
             {updatedFile instanceof File && (
                 <div className="rounded-lg border p-3">
-                    {updatedFile.type.startsWith("image/") && previewUrl && (
-                        <img
-                            src={previewUrl}
-                            alt={updatedFile.name}
-                            className="h-32 w-32 rounded-md object-cover"
-                        />
+                    {updatedFile.type === "application/pdf" ? (
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-md bg-red-50">
+                                <FileText className="h-6 w-6 text-red-600" />
+                            </div>
+
+                            <div>
+                                <p className="text-sm font-medium">
+                                    {updatedFile.name}
+                                </p>
+
+                                <p className="text-xs text-muted-foreground">
+                                    PDF file
+                                </p>
+                            </div>
+                        </div>
+                    ) : (
+                        previewUrl && (
+                            <img
+                                src={previewUrl}
+                                alt={updatedFile.name}
+                                className="h-32 w-32 rounded-md object-cover"
+                            />
+                        )
                     )}
                 </div>
             )}

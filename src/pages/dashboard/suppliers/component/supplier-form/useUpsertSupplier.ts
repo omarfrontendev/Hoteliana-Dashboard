@@ -27,9 +27,9 @@ export const useUpsertSupplier = ({ id }: Params = {}) => {
       return data;
     },
 
-    onSuccess: () => {
+    onSuccess: (res) => {
       toast.success(
-        t('suppliers.successCreate'),
+        res?.message || t(id ? 'success Create' : "Success Update"),
       );
 
       queryClient.invalidateQueries({
