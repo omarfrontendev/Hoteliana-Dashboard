@@ -113,7 +113,7 @@ export const AgentForm = () => {
                     file: documents.companyOwnerIdUploadId,
                     category: "company_owner_id",
                 }),
-                await uploadFile({
+                documents.bankGuaranteeLetterUploadId && await uploadFile({
                     file: documents.bankGuaranteeLetterUploadId,
                     category: "bank_guarantee_letter",
                 }),
