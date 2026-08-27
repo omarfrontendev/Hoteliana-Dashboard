@@ -88,8 +88,6 @@ export const AgentForm = () => {
                 ...supplierData
             } = values;
 
-            console.log(values)
-
             const [
                 commercialRegistration,
                 taxCertificate,
@@ -113,8 +111,8 @@ export const AgentForm = () => {
                     file: documents.companyOwnerIdUploadId,
                     category: "company_owner_id",
                 }),
-                documents.bankGuaranteeLetterUploadId && await uploadFile({
-                    file: documents.bankGuaranteeLetterUploadId,
+                documents?.bankGuaranteeLetterUploadId && await uploadFile({
+                    file: documents?.bankGuaranteeLetterUploadId,
                     category: "bank_guarantee_letter",
                 }),
             ]);
@@ -136,7 +134,7 @@ export const AgentForm = () => {
                         companyOwnerId.uploadId,
 
                     bankGuaranteeLetterUploadId:
-                        bankGuaranteeLetter.uploadId,
+                        bankGuaranteeLetter?.uploadId || null,
                 },
             };
 
