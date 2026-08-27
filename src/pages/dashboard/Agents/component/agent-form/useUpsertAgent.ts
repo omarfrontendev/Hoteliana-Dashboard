@@ -3,11 +3,12 @@ import { api } from '@/core/api/client';
 import { endpoints } from '@/api/endpoints';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
-import type { SupplierFormValues } from './agent.schema';
+// import type { SupplierFormValues, UpdateSupplierFormValues } from './agent.schema';
 
 type Params = {
   id?: string;
 };
+
 
 export const useUpsertAgent = ({ id }: Params = {}) => {
   const queryClient = useQueryClient();
@@ -15,7 +16,7 @@ export const useUpsertAgent = ({ id }: Params = {}) => {
   const { t } = useTranslation();
 
   return useMutation({
-    mutationFn: async (body: SupplierFormValues) => {
+    mutationFn: async (body: any) => {
       const url = isEdit
         ? endpoints.agents.updateAgent(id!)
         : endpoints.agents.createAgent;
@@ -29,7 +30,7 @@ export const useUpsertAgent = ({ id }: Params = {}) => {
 
     onSuccess: (res) => {
       toast.success(
-        res?.message || t(id ?'success Create' : "Success Update"),
+        res?.message || t(id ? 'success Create' : "Success Update"),
       );
 
       queryClient.invalidateQueries({

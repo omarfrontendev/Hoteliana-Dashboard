@@ -240,9 +240,9 @@ export const AgentFields = (
 };
 
 export const updateAgentFields = (
-    roles: any[],
-    permissionsProfiles: any[],
-    isLoading: boolean,
+    // roles: any[],
+    // permissionsProfiles: any[],
+    // isLoading: boolean,
     countryOptions: any[],
     citiesOptions: any[]
 ) => {
@@ -382,53 +382,53 @@ export const updateAgentFields = (
         // ============================================
         // Main User
         // ============================================
-        {
-            section: "mainUser",
-            fields: [
-                {
-                    name: "mainUser.username",
-                    label: "Username.label",
-                    placeholder: "Username.placeholder",
-                    colSpan: "col-span-6",
-                    type: "text",
-                    required: true,
-                },
-                {
-                    name: "mainUser.email",
-                    label: "email.label",
-                    placeholder: "email.placeholder",
-                    colSpan: "col-span-6",
-                    type: "email",
-                    required: true,
-                },
-                {
-                    name: "mainUser.phoneNumber",
-                    label: "phone.label",
-                    placeholder: "phone.placeholder",
-                    colSpan: "col-span-6",
-                    type: "text",
-                },
-                {
-                    name: "mainUser.role",
-                    label: "role.label",
-                    placeholder: "role.placeholder",
-                    colSpan: "col-span-6",
-                    type: "select",
-                    required: false,
-                    list: roles,
-                },
-                {
-                    name: "mainUser.permissionProfileIds",
-                    label: "profilePermission.label",
-                    placeholder: "role.profilePermission",
-                    colSpan: "col-span-6",
-                    type: "select",
-                    required: true,
-                    list: permissionsProfiles,
-                    isLoading,
-                },
-            ],
-        },
+        // {
+        //     section: "mainUser",
+        //     fields: [
+        //         {
+        //             name: "mainUser.username",
+        //             label: "Username.label",
+        //             placeholder: "Username.placeholder",
+        //             colSpan: "col-span-6",
+        //             type: "text",
+        //             required: true,
+        //         },
+        //         {
+        //             name: "mainUser.email",
+        //             label: "email.label",
+        //             placeholder: "email.placeholder",
+        //             colSpan: "col-span-6",
+        //             type: "email",
+        //             required: true,
+        //         },
+        //         {
+        //             name: "mainUser.phoneNumber",
+        //             label: "phone.label",
+        //             placeholder: "phone.placeholder",
+        //             colSpan: "col-span-6",
+        //             type: "text",
+        //         },
+        //         {
+        //             name: "mainUser.role",
+        //             label: "role.label",
+        //             placeholder: "role.placeholder",
+        //             colSpan: "col-span-6",
+        //             type: "select",
+        //             required: false,
+        //             list: roles,
+        //         },
+        //         {
+        //             name: "mainUser.permissionProfileIds",
+        //             label: "profilePermission.label",
+        //             placeholder: "role.profilePermission",
+        //             colSpan: "col-span-6",
+        //             type: "select",
+        //             required: true,
+        //             list: permissionsProfiles,
+        //             isLoading,
+        //         },
+        //     ],
+        // },
 
         // ============================================
         // Documents

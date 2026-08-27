@@ -9,10 +9,10 @@ import { useEffect } from 'react';
 import { useUploadFile, type UploadCategory } from '@/hooks/useUpload';
 import { mapSupplierDocuments } from '@/utils/helper';
 import { useUpsertAgent } from './useUpsertAgent';
-import { SupplierSchema, type SupplierFormValues } from './agent.schema';
+import { UpdateSupplierSchema, type UpdateSupplierFormValues } from './agent.schema';
 import { updateAgentFields } from './agent.elements';
-import { useAllPermissions } from '@/hooks/permissions/usePermissions';
-import { dashboardUserRoles } from '@/constants/userRoles';
+// import { useAllPermissions } from '@/hooks/permissions/usePermissions';
+// import { dashboardUserRoles } from '@/constants/userRoles';
 import { useSingleAgent } from '@/hooks/agents/useSingleAgent';
 import { City, Country } from 'country-state-city';
 import { useTranslation } from 'react-i18next';
@@ -22,8 +22,8 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
     const { mutateAsync: uploadFile, isPending: isUploadingFile } = useUploadFile();
     const { mutate: createAgent, isPending } = useUpsertAgent({ id });
 
-    const { permissionsProfiles, isLoading } = useAllPermissions();
-    const profilesOptions = permissionsProfiles.map((item: any) => ({ label: item.nameEn, value: item.id }));
+    // const { permissionsProfiles, isLoading } = useAllPermissions();
+    // const profilesOptions = permissionsProfiles.map((item: any) => ({ label: item.nameEn, value: item.id }));
 
     // get user data if id is provided
     const { agent } = useSingleAgent(id);
@@ -36,8 +36,8 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
         value: country.isoCode,
     }));
 
-    const form = useForm<SupplierFormValues>({
-        resolver: zodResolver(SupplierSchema),
+    const form = useForm<UpdateSupplierFormValues>({
+        resolver: zodResolver(UpdateSupplierSchema),
 
         defaultValues: {
             legalCompanyNameEn: '',
@@ -103,19 +103,11 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
                 phoneNumber: agent.owner?.phoneNumber ?? '',
                 email: agent.owner?.email ?? '',
             },
-            mainUser: {
-                email: agent?.users[0].email,
-                username: agent?.users[0].username,
-                phoneNumber: agent?.users[0].phoneNumber,
-                role: agent?.users[0].role,
-                permissionProfileIds: agent?.users[0]?.permissionProfileIds?.[0],
-            },
             documents: mapSupplierDocuments(
                 agent.documents
             ),
         });
     }, [agent, form]);
-
 
     const resolveUploadId = async (
         document: {
@@ -139,7 +131,7 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
     };
 
     const onSubmit = async (
-        values: SupplierFormValues
+        values: UpdateSupplierFormValues
     ) => {
         try {
             const {
@@ -222,7 +214,10 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
                     </div>
 
                     <div className="grid gap-4">
-                        {updateAgentFields(dashboardUserRoles, profilesOptions, isLoading, countryOptions, citiesOptions).map((section: any) => (
+                        {updateAgentFields(
+                            // dashboardUserRoles, profilesOptions, isLoading,
+                            countryOptions, citiesOptions
+                        ).map((section: any) => (
                             <section key={section.section}>
                                 <div className="">
                                     <h2 className="text-lg font-semibold">
