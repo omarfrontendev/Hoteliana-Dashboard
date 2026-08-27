@@ -17,9 +17,10 @@ export const SupplierSchema = z.object({
         .string()
         .min(1, 'Arabic company name is required')
         .regex(
-            /^[\u0600-\u06FF\s&.,'()-]+$/,
-            'Arabic company name must contain only Arabic characters',
+            /^[^A-Za-z]*$/,
+            'Arabic company name must not contain English letters',
         ),
+        
     countryCode: z.string().min(1, 'Country is required'),
     city: z.string().min(1, 'City is required'),
 
