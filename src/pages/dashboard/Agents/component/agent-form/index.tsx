@@ -8,8 +8,8 @@ import { SupplierSchema, type SupplierFormValues } from './agent.schema';
 import { useNavigate } from 'react-router-dom';
 import { useUpsertAgent } from './useUpsertAgent';
 import { AgentFields } from './agent.elements';
-import { useAllPermissions } from '@/hooks/permissions/usePermissions';
-import { dashboardUserRoles } from '@/constants/userRoles';
+// import { useAllPermissions } from '@/hooks/permissions/usePermissions';
+// import { dashboardUserRoles } from '@/constants/userRoles';
 import { useUploadFile } from '@/hooks/useUpload';
 import { useTranslation } from 'react-i18next';
 import { City, Country } from 'country-state-city';
@@ -29,8 +29,8 @@ export const AgentForm = () => {
         value: country.isoCode,
     }));
 
-    const { permissionsProfiles, isLoading } = useAllPermissions();
-    const profilesOptions = permissionsProfiles.map((item: any) => ({ label: item.nameEn, value: item.id }));
+    // const { permissionsProfiles, isLoading } = useAllPermissions();
+    // const profilesOptions = permissionsProfiles.map((item: any) => ({ label: item.nameEn, value: item.id }));
 
     // get user data if id is provided
     // const { agent } = useSingleAgent(id);
@@ -168,7 +168,7 @@ export const AgentForm = () => {
                     </div>
 
                     <div className="grid gap-4">
-                        {AgentFields(dashboardUserRoles, profilesOptions, isLoading, countryOptions, citiesOptions).map(
+                        {AgentFields( countryOptions, citiesOptions).map(
                                 (section) => (
                                     <section
                                         key={section.title}

@@ -171,15 +171,16 @@ export const SupplierSchema = z.object({
             .string()
             .trim()
             .nonempty({ message: 'username' }),
-        role: z
-            .string()
-            .nonempty({ message: 'roleRequired' }),
 
         phoneNumber: z
             .string()
             .trim()
             .nonempty({ message: 'phoneRequired' }),
-        permissionProfileIds: z.number().nullable(),
+
+        // role: z
+        //     .string()
+        //     .nonempty({ message: 'roleRequired' }),
+        // permissionProfileIds: z.number().nullable(),
     }),
 
     documents: z
@@ -364,7 +365,7 @@ export const UpdateSupplierSchema = z.object({
             },
         ),
 
-        documents: z
+    documents: z
         .object({
             commercialRegistrationUploadId: z.any(),
             taxCertificateUploadId: z.any(),
