@@ -8,7 +8,7 @@ import {
     type ColumnDef,
 } from "@tanstack/react-table";
 
-import type { AppDispatch, RootState } from "@/app/store";
+import type { AppDispatch } from "@/app/store";
 import { userStatus } from "@/constants/userStatus";
 import type { UsersTableOptions } from "@/types/users";
 import { dashboardUserRoles } from "@/constants/userRoles";
@@ -21,7 +21,7 @@ export const useSuppliersTableLogic = () => {
     const [statusDialog, setStatusDialog] = useState(null);
 
     // Select suppliers state from Redux store
-    const { suppliers, loading, total } = useSelector((state: RootState) => state.suppliers);
+    const { suppliers, loading, total, error } = useSelector((state: any) => state.suppliers);
 
     // Local state to trigger manual refresh
     const [refreshData, setRefreshData] = useState(false);
@@ -174,6 +174,7 @@ export const useSuppliersTableLogic = () => {
         statusList: userStatus,
         statusDialog,
         roleFilter,
+        errorMsg: error?.message,
         onSearch,
         onClearSearch,
         onStatusFilter,

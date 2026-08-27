@@ -18,6 +18,7 @@ export default function SuppliersTable() {
         // statusFilter,
         // statusList,
         statusDialog,
+        errorMsg,
         // roleFilter,
         // onRoleFilter,
         setStatusDialog,
@@ -29,6 +30,7 @@ export default function SuppliersTable() {
     return (
         <div className="grid gap-2">
             <MainTable
+            errorMsg={errorMsg}
                 TableFilters={
                     <Card className="p-2">
                         <div className="flex items-center gap-2">
