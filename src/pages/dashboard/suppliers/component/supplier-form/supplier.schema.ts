@@ -98,10 +98,20 @@ export const SupplierSchema = z.object({
             tourismLicenseUploadId: z.any(),
             supplierContractUploadId: z.any(),
             companyOwnerIdUploadId: z.any(),
-            bankGuaranteeLetterUploadId: z.any(),
+            bankGuaranteeLetterUploadId: z.any().optional(),
         })
         .superRefine((documents, ctx) => {
-            Object.entries(documents).forEach(([key, value]) => {
+            const requiredDocuments = [
+                'commercialRegistrationUploadId',
+                'taxCertificateUploadId',
+                'tourismLicenseUploadId',
+                'supplierContractUploadId',
+                'companyOwnerIdUploadId',
+            ] as const;
+
+            requiredDocuments.forEach((key) => {
+                const value = documents[key];
+
                 if (
                     value === undefined ||
                     value === null ||
