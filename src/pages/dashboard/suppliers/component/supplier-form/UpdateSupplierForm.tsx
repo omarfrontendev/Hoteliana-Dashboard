@@ -273,7 +273,7 @@ export const UpdateSupplierForm = ({ id }: { id?: string }) => {
                     disabled={isPending || isUploadingFile}
                     className="h-12 w-full"
                 >
-                    {isPending || isUploadingFile ? 'Saving...' : 'Create Supplier'}
+                    {isPending || isUploadingFile ? 'Saving...' : 'Update Supplier'}
                 </Button>
             </form>
         </Form>
