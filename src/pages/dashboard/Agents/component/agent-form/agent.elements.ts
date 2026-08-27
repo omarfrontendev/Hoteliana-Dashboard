@@ -349,35 +349,35 @@ export const updateAgentFields = (
         // ============================================
         // Owner Information
         // ============================================
-        {
-            section: "ownerInformation",
-            fields: [
-                {
-                    name: 'owner.name',
-                    label: 'owner.name',
-                    placeholder: 'owner.name',
-                    colSpan: 'col-span-4',
-                    type: 'text',
-                    required: true,
-                },
-                {
-                    name: 'owner.phoneNumber',
-                    label: 'owner.phoneNumber',
-                    placeholder: 'owner.phoneNumber',
-                    colSpan: 'col-span-4',
-                    type: 'number',
-                    required: true,
-                },
-                {
-                    name: 'owner.email',
-                    label: 'owner.email',
-                    placeholder: 'owner.email',
-                    colSpan: 'col-span-4',
-                    type: 'email',
-                    required: true,
-                },
-            ],
-        },
+        // {
+        //     section: "ownerInformation",
+        //     fields: [
+        //         {
+        //             name: 'owner.name',
+        //             label: 'owner.name',
+        //             placeholder: 'owner.name',
+        //             colSpan: 'col-span-4',
+        //             type: 'text',
+        //             required: true,
+        //         },
+        //         {
+        //             name: 'owner.phoneNumber',
+        //             label: 'owner.phoneNumber',
+        //             placeholder: 'owner.phoneNumber',
+        //             colSpan: 'col-span-4',
+        //             type: 'number',
+        //             required: true,
+        //         },
+        //         {
+        //             name: 'owner.email',
+        //             label: 'owner.email',
+        //             placeholder: 'owner.email',
+        //             colSpan: 'col-span-4',
+        //             type: 'email',
+        //             required: true,
+        //         },
+        //     ],
+        // },
 
         // ============================================
         // Main User

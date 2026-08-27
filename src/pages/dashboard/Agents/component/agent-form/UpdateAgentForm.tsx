@@ -52,12 +52,6 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
             bankIban: '',
             contractEndDate: '',
 
-            owner: {
-                name: '',
-                phoneNumber: '',
-                email: '',
-            },
-
             documents: {
                 commercialRegistrationUploadId: undefined,
                 taxCertificateUploadId: undefined,
@@ -98,11 +92,6 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
             bankIban: agent.bankIban ?? '',
             contractEndDate: agent.contractEndDate ?? '',
 
-            owner: {
-                name: agent.owner?.name ?? '',
-                phoneNumber: agent.owner?.phoneNumber ?? '',
-                email: agent.owner?.email ?? '',
-            },
             documents: mapSupplierDocuments(
                 agent.documents
             ),

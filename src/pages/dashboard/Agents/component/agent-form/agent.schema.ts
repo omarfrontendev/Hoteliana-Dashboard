@@ -364,41 +364,7 @@ export const UpdateSupplierSchema = z.object({
             },
         ),
 
-    owner: z.object({
-        name: z.string().min(1, 'Owner name is required'),
-
-        phoneNumber: z
-            .string()
-            .min(1, 'Owner phone number is required'),
-
-        email: z
-            .string()
-            .email('Invalid owner email address'),
-    }),
-
-
-    // mainUser: z.object({
-    //     email: z.string()
-    //         .trim()
-    //         .nonempty({ message: 'emailRequired' })
-    //         .email({ message: 'invalidEmail' }),
-
-    //     username: z
-    //         .string()
-    //         .trim()
-    //         .nonempty({ message: 'username' }),
-    //     role: z
-    //         .string()
-    //         .nonempty({ message: 'roleRequired' }),
-
-    //     phoneNumber: z
-    //         .string()
-    //         .trim()
-    //         .nonempty({ message: 'phoneRequired' }),
-    //     permissionProfileIds: z.number().nullable(),
-    // }),
-
-    documents: z
+        documents: z
         .object({
             commercialRegistrationUploadId: z.any(),
             taxCertificateUploadId: z.any(),
