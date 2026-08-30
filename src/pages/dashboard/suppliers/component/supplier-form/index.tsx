@@ -141,7 +141,7 @@ export const SupplierForm = () => {
             await createSupplier(finalBody, {
                 onSuccess: (e) => {
                     form.reset();
-                    setSupplierId(e.data.supplierId)
+                    setSupplierId(e.data.supplierId);
                 },
             });
         } catch (error) {

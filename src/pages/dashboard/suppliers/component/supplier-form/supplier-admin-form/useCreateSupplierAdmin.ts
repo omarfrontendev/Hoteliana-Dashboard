@@ -36,6 +36,7 @@ export const useCreateSupplierAdmin = ({
         CreateSupplierAdminPayload
     >({
         mutationFn: async (body) => {
+
             const url =
                 endpoints.suppliers.createSuperAdmin(
                     supplierId

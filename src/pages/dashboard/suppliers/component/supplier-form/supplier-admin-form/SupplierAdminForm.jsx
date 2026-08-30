@@ -15,7 +15,7 @@ export default function SupplierAdminForm({ id }) {
     const { t } = useTranslation();
 
     // create supplier admin mutation
-    const { mutate: saveUser, isPending } = useCreateSupplierAdmin({ id });
+    const { mutate: saveUser, isPending } = useCreateSupplierAdmin({ supplierId: id });
 
     const form = useForm({
         resolver: zodResolver(getUserSchema()),
@@ -30,7 +30,7 @@ export default function SupplierAdminForm({ id }) {
             },
         });
     };
-    
+
     return (
         <Form {...form}>
             <form
