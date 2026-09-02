@@ -13,7 +13,7 @@ import type { AppDispatch } from "@/app/store";
 import { userStatus } from "@/constants/userStatus";
 import { useUsersColumns } from "../components/UsersColumns";
 import type { User, UsersTableOptions } from "@/types/users";
-import { dashboardUserRoles } from "@/constants/userRoles";
+import { useAllPermissions } from "@/hooks/permissions/usePermissions";
 
 export const useUsersTableLogic = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -26,6 +26,9 @@ export const useUsersTableLogic = () => {
     // Local state to trigger manual refresh
     const [refreshData, setRefreshData] = useState(false);
 
+
+    const { permissionsProfiles } = useAllPermissions();
+    const profilesOptions = permissionsProfiles.map((item: any) => ({ label: item.nameEn, value: item.id }));
 
     // Table options state: pagination, search, and status filter
     // @@TODO FIX TO USE GetUsersPayload
@@ -127,7 +130,7 @@ export const useUsersTableLogic = () => {
 
     // Memoized current selected status value for UI display
     const roleFilter = useMemo(
-        () => tableOptions.role && dashboardUserRoles.find((option) => option.value === tableOptions.role)?.value,
+        () => tableOptions.role && permissionsProfiles.find((option) => option.value === tableOptions.role)?.value,
         [tableOptions.role]
     );
 
@@ -176,6 +179,7 @@ export const useUsersTableLogic = () => {
         statusDialog,
         roleFilter,
         errorMsg: error?.message,
+        profilesOptions,
         onSearch,
         onClearSearch,
         onStatusFilter,

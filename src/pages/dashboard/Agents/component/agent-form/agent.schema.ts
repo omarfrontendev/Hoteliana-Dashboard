@@ -1,20 +1,9 @@
 import { z } from 'zod';
 
 export const SupplierSchema = z.object({
-    legalCompanyNameEn: z
+    legalCompanyName: z
         .string()
-        .min(1, 'English company name is required')
-        .regex(
-            /^[A-Za-z0-9\s&.,'()-]+$/,
-            'English company name must contain only English characters',
-        ),
-    legalCompanyNameAr: z
-        .string()
-        .min(1, 'Arabic company name is required')
-        .regex(
-            /^[^A-Za-z]*$/,
-            'Arabic company name must not contain English letters',
-        ),
+        .min(1, 'Company name is required'),
 
     countryCode: z.string().min(1, 'Country is required'),
     city: z.string().min(1, 'City is required'),
@@ -33,41 +22,6 @@ export const SupplierSchema = z.object({
     tourismLicenseNumber: z
         .string()
         .min(1, 'Tourism license number is required'),
-
-    // bankIban: z
-    //     .string()
-    //     .min(1, 'Bank IBAN is required')
-    //     .refine(
-    //         (value) => {
-    //             const iban = value.replace(/\s/g, '').toUpperCase();
-
-    //             if (!/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(iban)) {
-    //                 return false;
-    //             }
-
-    //             const rearranged = iban.slice(4) + iban.slice(0, 4);
-
-    //             const numeric = rearranged
-    //                 .split('')
-    //                 .map((char) =>
-    //                     /[A-Z]/.test(char)
-    //                         ? (char.charCodeAt(0) - 55).toString()
-    //                         : char,
-    //                 )
-    //                 .join('');
-
-    //             let remainder = 0;
-
-    //             for (const digit of numeric) {
-    //                 remainder = (remainder * 10 + Number(digit)) % 97;
-    //             }
-
-    //             return remainder === 1;
-    //         },
-    //         {
-    //             message: 'Please enter a valid IBAN',
-    //         },
-    //     ),
 
     bankIban: z
         .string()
@@ -131,23 +85,6 @@ export const SupplierSchema = z.object({
             },
         ),
 
-    contractEndDate: z
-        .string()
-        .min(1, 'Contract end date is required')
-        .refine(
-            (date) => {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                const contractDate = new Date(`${date}T00:00:00`);
-
-                return contractDate >= today;
-            },
-            {
-                message: 'Contract end date must not be in the past',
-            },
-        ),
-
     owner: z.object({
         name: z.string().min(1, 'Owner name is required'),
 
@@ -161,27 +98,22 @@ export const SupplierSchema = z.object({
     }),
 
 
-    mainUser: z.object({
-        email: z.string()
-            .trim()
-            .nonempty({ message: 'emailRequired' })
-            .email({ message: 'invalidEmail' }),
+    // mainUser: z.object({
+    //     email: z.string()
+    //         .trim()
+    //         .nonempty({ message: 'emailRequired' })
+    //         .email({ message: 'invalidEmail' }),
 
-        username: z
-            .string()
-            .trim()
-            .nonempty({ message: 'username' }),
+    //     username: z
+    //         .string()
+    //         .trim()
+    //         .nonempty({ message: 'username' }),
 
-        phoneNumber: z
-            .string()
-            .trim()
-            .nonempty({ message: 'phoneRequired' }),
-
-        // role: z
-        //     .string()
-        //     .nonempty({ message: 'roleRequired' }),
-        // permissionProfileIds: z.number().nullable(),
-    }),
+    //     phoneNumber: z
+    //         .string()
+    //         .trim()
+    //         .nonempty({ message: 'phoneRequired' }),
+    // }),
 
     documents: z
         .object({
@@ -218,20 +150,9 @@ export const SupplierSchema = z.object({
 });
 
 export const UpdateSupplierSchema = z.object({
-    legalCompanyNameEn: z
+    legalCompanyName: z
         .string()
-        .min(1, 'English company name is required')
-        .regex(
-            /^[A-Za-z0-9\s&.,'()-]+$/,
-            'English company name must contain only English characters',
-        ),
-    legalCompanyNameAr: z
-        .string()
-        .min(1, 'Arabic company name is required')
-        .regex(
-            /^[^A-Za-z]*$/,
-            'Arabic company name must not contain English letters',
-        ),
+        .min(1, 'Company name is required'),
 
     countryCode: z.string().min(1, 'Country is required'),
     city: z.string().min(1, 'City is required'),
@@ -250,41 +171,6 @@ export const UpdateSupplierSchema = z.object({
     tourismLicenseNumber: z
         .string()
         .min(1, 'Tourism license number is required'),
-
-    // bankIban: z
-    //     .string()
-    //     .min(1, 'Bank IBAN is required')
-    //     .refine(
-    //         (value) => {
-    //             const iban = value.replace(/\s/g, '').toUpperCase();
-
-    //             if (!/^[A-Z]{2}\d{2}[A-Z0-9]+$/.test(iban)) {
-    //                 return false;
-    //             }
-
-    //             const rearranged = iban.slice(4) + iban.slice(0, 4);
-
-    //             const numeric = rearranged
-    //                 .split('')
-    //                 .map((char) =>
-    //                     /[A-Z]/.test(char)
-    //                         ? (char.charCodeAt(0) - 55).toString()
-    //                         : char,
-    //                 )
-    //                 .join('');
-
-    //             let remainder = 0;
-
-    //             for (const digit of numeric) {
-    //                 remainder = (remainder * 10 + Number(digit)) % 97;
-    //             }
-
-    //             return remainder === 1;
-    //         },
-    //         {
-    //             message: 'Please enter a valid IBAN',
-    //         },
-    //     ),
 
     bankIban: z
         .string()
@@ -345,23 +231,6 @@ export const UpdateSupplierSchema = z.object({
             },
             {
                 message: 'Please enter a valid IBAN',
-            },
-        ),
-
-    contractEndDate: z
-        .string()
-        .min(1, 'Contract end date is required')
-        .refine(
-            (date) => {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-
-                const contractDate = new Date(`${date}T00:00:00`);
-
-                return contractDate >= today;
-            },
-            {
-                message: 'Contract end date must not be in the past',
             },
         ),
 

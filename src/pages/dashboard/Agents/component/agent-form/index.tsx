@@ -5,19 +5,16 @@ import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import FormField from '@/components/ui/FormField';
 import { SupplierSchema, type SupplierFormValues } from './agent.schema';
-import { useNavigate } from 'react-router-dom';
 import { useUpsertAgent } from './useUpsertAgent';
 import { AgentFields } from './agent.elements';
-// import { useAllPermissions } from '@/hooks/permissions/usePermissions';
-// import { dashboardUserRoles } from '@/constants/userRoles';
 import { useUploadFile } from '@/hooks/useUpload';
 import { useTranslation } from 'react-i18next';
 import { City, Country } from 'country-state-city';
-
-
+import { useState } from 'react';
+import AgentAdminForm from './agent-admin-form/AgentAdminForm';
 
 export const AgentForm = () => {
-    const navigate = useNavigate();
+    const [agentId, setAgentId] = useState(null);
     const { mutateAsync: uploadFile, isPending: isUploadingFile } = useUploadFile();
     const { mutate: createAgent, isPending } = useUpsertAgent();
     const { t } = useTranslation();
@@ -29,18 +26,11 @@ export const AgentForm = () => {
         value: country.isoCode,
     }));
 
-    // const { permissionsProfiles, isLoading } = useAllPermissions();
-    // const profilesOptions = permissionsProfiles.map((item: any) => ({ label: item.nameEn, value: item.id }));
-
-    // get user data if id is provided
-    // const { agent } = useSingleAgent(id);
-
     const form = useForm<SupplierFormValues>({
         resolver: zodResolver(SupplierSchema),
 
         defaultValues: {
-            legalCompanyNameEn: '',
-            legalCompanyNameAr: '',
+            legalCompanyName: '',
             countryCode: '',
             city: '',
             phoneNumber: '',
@@ -49,7 +39,7 @@ export const AgentForm = () => {
             taxCertificateNumber: '',
             tourismLicenseNumber: '',
             bankIban: '',
-            contractEndDate: '',
+            // contractEndDate: '',
 
             owner: {
                 name: '',
@@ -139,15 +129,20 @@ export const AgentForm = () => {
             };
 
             await createAgent(finalBody, {
-                onSuccess: () => {
+                onSuccess: (e) => {
                     form.reset();
-                    navigate("/agents");
+                    setAgentId(e.data.agentId);
                 },
             });
         } catch (error) {
             console.error(error);
         }
     };
+
+
+    if (agentId) return (
+        <AgentAdminForm id={agentId} />
+    )
 
     return (
         <Form {...form}>
@@ -168,34 +163,34 @@ export const AgentForm = () => {
                     </div>
 
                     <div className="grid gap-4">
-                        {AgentFields( countryOptions, citiesOptions).map(
-                                (section) => (
-                                    <section
-                                        key={section.title}
-                                        className="w-full rounded-xl bg-white"
-                                    >
-                                        <div className="mb-6">
-                                            <h2 className="text-lg font-semibold">
-                                                {t(`sections.${section.title}`)}
-                                            </h2>
+                        {AgentFields(countryOptions, citiesOptions).map(
+                            (section) => (
+                                <section
+                                    key={section.title}
+                                    className="w-full rounded-xl bg-white"
+                                >
+                                    <div className="mb-6">
+                                        <h2 className="text-lg font-semibold">
+                                            {t(`sections.${section.title}`)}
+                                        </h2>
 
-                                            <p className="text-sm text-gray-500">
-                                                {t(`sections.${section.description}`)}
-                                            </p>
-                                        </div>
+                                        <p className="text-sm text-gray-500">
+                                            {t(`sections.${section.description}`)}
+                                        </p>
+                                    </div>
 
-                                        <div className="grid grid-cols-12 gap-4">
-                                            {section.fields.map((field: any) => (
-                                                <FormField
-                                                    key={field.name}
-                                                    form={form}
-                                                    {...field}
-                                                />
-                                            ))}
-                                        </div>
-                                    </section>
-                                ),
-                            )}
+                                    <div className="grid grid-cols-12 gap-4">
+                                        {section.fields.map((field: any) => (
+                                            <FormField
+                                                key={field.name}
+                                                form={form}
+                                                {...field}
+                                            />
+                                        ))}
+                                    </div>
+                                </section>
+                            ),
+                        )}
                     </div>
                 </div>
 

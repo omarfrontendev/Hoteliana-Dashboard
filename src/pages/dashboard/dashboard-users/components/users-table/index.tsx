@@ -5,7 +5,6 @@ import Filter from "../../../../../components/ui/Filter";
 import TableSearch from "@/components/ui/table-search";
 import ToggleStatusDialog from "./components/ToggleStatusDialog";
 import { useTranslation } from "react-i18next";
-import { dashboardUserRoles } from "@/constants/userRoles";
 
 export default function UsersTable() {
 
@@ -20,6 +19,7 @@ export default function UsersTable() {
         statusDialog,
         roleFilter,
         errorMsg,
+        profilesOptions,
         onRoleFilter,
         setStatusDialog,
         onSearch,
@@ -52,7 +52,7 @@ export default function UsersTable() {
                                 <Filter
                                     placeholder={t("fields.role.label")}
                                     value={roleFilter}
-                                    options={dashboardUserRoles}
+                                    options={profilesOptions}
                                     onChange={onRoleFilter}
                                 />
                             </div>

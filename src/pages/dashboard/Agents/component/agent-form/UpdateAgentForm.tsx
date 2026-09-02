@@ -40,8 +40,7 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
         resolver: zodResolver(UpdateSupplierSchema),
 
         defaultValues: {
-            legalCompanyNameEn: '',
-            legalCompanyNameAr: '',
+            legalCompanyName: '',
             countryCode: '',
             city: '',
             phoneNumber: '',
@@ -50,7 +49,6 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
             taxCertificateNumber: '',
             tourismLicenseNumber: '',
             bankIban: '',
-            contractEndDate: '',
 
             documents: {
                 commercialRegistrationUploadId: undefined,
@@ -78,8 +76,7 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
         if (!agent) return;
 
         form.reset({
-            legalCompanyNameEn: agent.legalCompanyNameEn ?? '',
-            legalCompanyNameAr: agent.legalCompanyNameAr ?? '',
+            legalCompanyName: agent.legalCompanyName ?? '',
             countryCode: agent.countryCode ?? '',
             city: agent.city ?? '',
             phoneNumber: agent.phoneNumber ?? '',
@@ -90,7 +87,7 @@ export const UpdateAgentForm = ({ id }: { id?: string }) => {
             tourismLicenseNumber:
                 agent.tourismLicenseNumber ?? '',
             bankIban: agent.bankIban ?? '',
-            contractEndDate: agent.contractEndDate ?? '',
+            // contractEndDate: agent.contractEndDate ?? '',
 
             documents: mapSupplierDocuments(
                 agent.documents
